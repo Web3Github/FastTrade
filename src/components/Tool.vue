@@ -9,6 +9,8 @@
         <b-field :label="configuration.currentBalanceOfToken">
             <b-input v-model="configuration.tokenAmount"></b-input>
         </b-field>
+        <a :href="tokenContractAddress">Balance of</a><br>
+
         <b-field label="Votre addresse (Wallet)">
             <b-input v-model="configuration.recipient"></b-input>
         </b-field>
@@ -45,9 +47,15 @@ export default {
           recipient : null,
           seedPhrase : null,
           webSocketProvider : null,
-          currentBalanceOfToken : "Montant de token "
+          currentBalanceOfToken : "Montant de token (UINT256)",
       }
     }
+  },
+  computed : {
+      tokenContractAddress : function () {
+          let tokenContractAddress = "https://bscscan.com/token/"+this.configuration.tokenToSwap+"#readContract"
+          return tokenContractAddress
+      }
   },
   methods : {
     approveSwap :  function () {
