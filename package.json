@@ -12,7 +12,10 @@
     "buefy": "^0.9.0",
     "core-js": "^3.6.5",
     "ethers": "^5.3.1",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
