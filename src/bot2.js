@@ -6,63 +6,49 @@ const addresses = {
   router: '0x10ED43C718714eb63d5aA57B78B54704E256024E', // PSW2 Router address
 }
 
-// Function to approve before swapping RUN THIS BEFORE IF YOU NEVER APPROVED SWAP
-async function approveSwap (_mnemonic, _tokenToSwap, _tokenDecimals, _tokenAmount, _providerWSS) {
+// Function to approve before swapping RUN THIS BEFORE IF YOU NEVER APPROVED SWAP ------ WORKING 
+async function approveSwap (_tokenToSwap) {
 
   // Setting up values
-  let provider = new ethers.providers.WebSocketProvider(_providerWSS)
-
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
   // Setting up basics
-  let wallet = ethers.Wallet.fromMnemonic(_mnemonic);
-  let account = wallet.connect(provider);
-  let router = new ethers.Contract(
-    addresses.router,
-    [
-      'function getAmountsOut(uint amountIn, address[] memory path) public view returns (uint[] memory amounts)',
-      'function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)'
-    ],
-    account
-  );
-
   const wbnb = new ethers.Contract(
     _tokenToSwap,
     [
       'function approve(address spender, uint amount) public returns(bool)',
     ],
-    account
+    signer
   );
-
   const tx = await wbnb.approve(
-    router.address, 
+    addresses.router, 
     ethers.constants.MaxUint256
   );
-  const receipt = await tx.wait(); 
+  const receipt = await signer.sendTransaction(tx); 
   console.log('Transaction receipt');
   console.log(receipt);
 
 }
 
 // FUNCTION TO SELL TOKEN
-async function sellToken (_mnemonic, _tokenToSwap, _tokenDecimals, _tokenAmount, _providerWSS, _recipient) {
-
-  // Setting up values
-  let provider = new ethers.providers.WebSocketProvider(_providerWSS)
-
+async function sellToken (_tokenToSwap, _tokenDecimals, _tokenAmount) {
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
+  const addressSigner = await signer.getAddress();
   // Setting up basics
-  let wallet = ethers.Wallet.fromMnemonic(_mnemonic);
-  let account = wallet.connect(provider);
   let router = new ethers.Contract(
     addresses.router,
     [
       'function getAmountsOut(uint amountIn, address[] memory path) public view returns (uint[] memory amounts)',
       'function swapExactTokensForETHSupportingFeeOnTransferTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)'
     ],
-    account
+    signer
   );
 
   //const amountIn = ethers.utils.parseUnits(_tokenAmount, _tokenDecimals);
   const amountIn = ethers.BigNumber.from(_tokenAmount);
-  console.log("Amount of token in : " + amountIn);
   const _gasPrice = ethers.utils.parseUnits('5','gwei')
   const amounts = await router.getAmountsOut(amountIn, [_tokenToSwap, addresses.WBNB]);
   //Our execution price will be a bit different, we need some flexbility
@@ -77,44 +63,18 @@ async function sellToken (_mnemonic, _tokenToSwap, _tokenDecimals, _tokenAmount,
     amountIn,
     amountOutMin,
     [_tokenToSwap, addresses.WBNB],
-    _recipient,
+    addressSigner,
     Date.now() + 1000 * 60 * 10, //10 minutes
     {
       gasPrice: _gasPrice,
       gasLimit: 2000000 
     }
   );
-  const receipt = await tx.wait(); 
-  console.log('Transaction receipt');
+  const receipt = await tx.wait();
   console.log(receipt);
-}
-
-// Function that allows you to get your balance in uint256
-async function balanceOfToken (_mnemonic, _tokenToSwap, _providerWSS, _recipient) {
-  // Setting up values
-  let provider = new ethers.providers.WebSocketProvider(_providerWSS)
-
-  // Setting up basics
-  let wallet = ethers.Wallet.fromMnemonic(_mnemonic);
-  let account = wallet.connect(provider);
-
-  const wbnb = new ethers.Contract(
-    _tokenToSwap,
-    [
-      'function balanceOf(address account) public returns(uint256)',
-    ],
-    account
-  );
-
-  const tx = await wbnb.balanceOf(_recipient);
-  const receipt = await tx.wait(); 
-  console.log('Balance of transaction receipt');
-  console.log(receipt);
-  console.log(ethers.BigNumber.from(tx.value._hex).toString())
 }
 
 module.exports = {
   sellToken,
-  approveSwap,
-  balanceOfToken
+  approveSwap
 }
