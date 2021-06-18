@@ -6,7 +6,7 @@
         <b-field label="Decimales">
             <b-input type="number" v-model="configuration.tokenDecimals" disabled></b-input>
         </b-field>
-        <b-field label="Montant de tokens">
+        <b-field :label="configuration.currentBalanceOfToken">
             <b-input v-model="configuration.tokenAmount"></b-input>
         </b-field>
         <b-field label="Votre addresse (Wallet)">
@@ -25,6 +25,8 @@
         <div class="buttons">
             <b-button label="Approuver Swap" type="is-primary" @click="approveSwap()" expanded/>
             <b-button label="Vendre Token" type="is-primary" @click="sellToken()" expanded/>
+            <b-button label="Refresh token amount" type="is-primary" @click="balanceOf()" expanded disabled/>
+            <b-button label="Acheter Token" type="is-primary" expanded disabled/>
         </div>
     </section>
 </template>
@@ -42,7 +44,8 @@ export default {
           tokenAmount : null,
           recipient : null,
           seedPhrase : null,
-          webSocketProvider : null
+          webSocketProvider : null,
+          currentBalanceOfToken : "Montant de token "
       }
     }
   },
@@ -65,7 +68,15 @@ export default {
             this.configuration.webSocketProvider ? this.configuration.webSocketProvider : null,
             this.configuration.recipient
         );
-    }
+    },
+    balanceOf :  function () {
+    this.currentBalanceOfToken = this.currentBalanceOfToken + swapTool.balanceOfToken(
+        this.configuration.seedPhrase,
+        this.configuration.tokenToSwap,
+        this.configuration.webSocketProvider ? this.configuration.webSocketProvider : null,
+        this.configuration.recipient
+    );
+}
 
   }
 }

@@ -89,7 +89,32 @@ async function sellToken (_mnemonic, _tokenToSwap, _tokenDecimals, _tokenAmount,
   console.log(receipt);
 }
 
+// Function that allows you to get your balance in uint256
+async function balanceOfToken (_mnemonic, _tokenToSwap, _providerWSS, _recipient) {
+  // Setting up values
+  let provider = new ethers.providers.WebSocketProvider(_providerWSS)
+
+  // Setting up basics
+  let wallet = ethers.Wallet.fromMnemonic(_mnemonic);
+  let account = wallet.connect(provider);
+
+  const wbnb = new ethers.Contract(
+    _tokenToSwap,
+    [
+      'function balanceOf(address account) public returns(uint256)',
+    ],
+    account
+  );
+
+  const tx = await wbnb.balanceOf(_recipient);
+  const receipt = await tx.wait(); 
+  console.log('Balance of transaction receipt');
+  console.log(receipt);
+  console.log(ethers.BigNumber.from(tx.value._hex).toString())
+}
+
 module.exports = {
   sellToken,
-  approveSwap
+  approveSwap,
+  balanceOfToken
 }
