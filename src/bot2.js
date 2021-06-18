@@ -32,7 +32,10 @@ async function approveSwap (_tokenToSwap) {
 }
 
 // FUNCTION TO SELL TOKEN
-async function sellToken (_tokenToSwap, _tokenDecimals, _tokenAmount) {
+async function sellToken (_tokenToSwap, _tokenDecimals, _tokenAmount,_inputGas) {
+  if(_inputGas < 5 ){
+    console.log('kek');
+  }
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
@@ -49,7 +52,7 @@ async function sellToken (_tokenToSwap, _tokenDecimals, _tokenAmount) {
 
   //const amountIn = ethers.utils.parseUnits(_tokenAmount, _tokenDecimals);
   const amountIn = ethers.BigNumber.from(_tokenAmount);
-  const _gasPrice = ethers.utils.parseUnits('5','gwei')
+  const _gasPrice = ethers.utils.parseUnits(_inputGas,'gwei')
   const amounts = await router.getAmountsOut(amountIn, [_tokenToSwap, addresses.WBNB]);
   //Our execution price will be a bit different, we need some flexbility
   const amountOutMin = amounts[1].sub(amounts[1].div(10));

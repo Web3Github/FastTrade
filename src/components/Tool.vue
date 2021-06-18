@@ -3,8 +3,8 @@
         <b-field label="Adresse du token a swap">
             <b-input v-model="configuration.tokenToSwap"></b-input>
         </b-field>
-        <b-field label="Decimales">
-            <b-input type="number" v-model="configuration.tokenDecimals" disabled></b-input>
+        <b-field label="Gas Fee">
+            <b-input v-model="configuration.inputGas"></b-input>
         </b-field>
         <b-field :label="configuration.currentBalanceOfToken">
             <b-input v-model="configuration.tokenAmount"></b-input>
@@ -25,7 +25,7 @@ export default {
     return {
       configuration : {
           tokenToSwap : null,
-          tokenDecimals : 0,
+          inputGas : 5,
           tokenAmount : null,
           currentBalanceOfToken : "Montant de token (UINT256)",
       }
@@ -42,6 +42,7 @@ export default {
             this.configuration.tokenToSwap,
             this.configuration.tokenDecimals,
             this.configuration.tokenAmount,
+            this.configuration.inputGas
         );
     },
   }
