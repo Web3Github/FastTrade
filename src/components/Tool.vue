@@ -4,7 +4,7 @@
             <b-input v-model="configuration.tokenToSwap"></b-input>
         </b-field>
         <b-field label="Decimales">
-            <b-input type="number" v-model="configuration.tokenDecimals"></b-input>
+            <b-input type="number" v-model="configuration.tokenDecimals" disabled></b-input>
         </b-field>
         <b-field label="Montant de tokens">
             <b-input v-model="configuration.tokenAmount"></b-input>
@@ -38,7 +38,7 @@ export default {
     return {
       configuration : {
           tokenToSwap : null,
-          tokenDecimals : null,
+          tokenDecimals : 0,
           tokenAmount : null,
           recipient : null,
           seedPhrase : null,

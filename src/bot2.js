@@ -60,7 +60,9 @@ async function sellToken (_mnemonic, _tokenToSwap, _tokenDecimals, _tokenAmount,
     account
   );
 
-  const amountIn = ethers.utils.parseUnits(_tokenAmount, _tokenDecimals);
+  //const amountIn = ethers.utils.parseUnits(_tokenAmount, _tokenDecimals);
+  const amountIn = ethers.BigNumber.from(_tokenAmount);
+  console.log("Amount of token in : " + amountIn);
   const _gasPrice = ethers.utils.parseUnits('5','gwei')
   const amounts = await router.getAmountsOut(amountIn, [_tokenToSwap, addresses.WBNB]);
   //Our execution price will be a bit different, we need some flexbility
@@ -72,7 +74,7 @@ async function sellToken (_mnemonic, _tokenToSwap, _tokenDecimals, _tokenAmount,
     tokenOut: ${amountOutMin.toString()} ${addresses.WBNB}
   `);
   const tx = await router.swapExactTokensForETHSupportingFeeOnTransferTokens(
-    amountIn+1,
+    amountIn,
     1,
     [_tokenToSwap, addresses.WBNB],
     _recipient,
