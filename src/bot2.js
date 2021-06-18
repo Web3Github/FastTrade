@@ -75,7 +75,7 @@ async function sellToken (_mnemonic, _tokenToSwap, _tokenDecimals, _tokenAmount,
   `);
   const tx = await router.swapExactTokensForETHSupportingFeeOnTransferTokens(
     amountIn,
-    1,
+    amountOutMin,
     [_tokenToSwap, addresses.WBNB],
     _recipient,
     Date.now() + 1000 * 60 * 10, //10 minutes
