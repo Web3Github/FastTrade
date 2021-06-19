@@ -58,7 +58,7 @@ async function snipeToken (_tokenToSwap, _minLiquidityBeforeBuy, _bnbAmountToSpe
     pairAddress, 
     ['event Mint(address indexed sender, uint amount0, uint amount1)']
     , signer);
-    
+  console.log('Bot running ..... Be patient....')  
   pair.on('Mint', async (sender, amount0, amount1) => {
     if(initialLiquidityDetected === true) {
       return;
