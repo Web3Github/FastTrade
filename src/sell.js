@@ -1,17 +1,18 @@
 const ethers = require('ethers');
 
 // CONSTANTS DEFINITION NOTHING TO MODIFY
-/* const addresses = {
+const addresses = {
   WBNB: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // Wrapped BNB, we only swap with that on PSW
   router: '0x10ED43C718714eb63d5aA57B78B54704E256024E', // PSW2 Router address
-} */
+  factory : '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73' // PSW2 Factory address
+}
 
 // When test net 
-const addresses = {
+/* const addresses = {
   WBNB: '0xae13d989dac2f0debff460ac112a837c89baa7cd', // Wrapped BNB TEST NET
   router: '0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3', // PSW2 Router address TESTNET
   factory: '0x6725F303b657a9451d8BA641348b6761A6CC7a17' // PSW Factory TESTNET
-}
+} */
 
 // SETTING UP PROVIDER USING METAMASK
 const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
