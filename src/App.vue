@@ -1,6 +1,5 @@
 <template>
-  <div id="app" style="flex-direction: column;padding-left: 1em;display: flex;flex-wrap: wrap;align-content: center;">
-    <h1 class="title">Fast Buy / Sell Tool</h1>
+  <div id="app">
     <Tool/>
   </div>
 </template>
@@ -10,7 +9,7 @@ import Tool from './components/Tool.vue'
 export default {
   name: 'App',
   components: {
-    Tool
+    Tool,
   }
 }
 </script>
