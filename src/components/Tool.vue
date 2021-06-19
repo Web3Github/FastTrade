@@ -40,6 +40,7 @@
             </b-field>
             <b-field label="Minimal liquidity of token before buy">
                 <b-numberinput
+                disabled
                 min="0"
                 step="0.001" 
                 v-model="snipeTool.minLiquidityBeforeBuy"
