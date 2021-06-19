@@ -122,6 +122,7 @@ export default {
         this.sellTool.tokenToSwap = null;
         this.sellTool.tokenAmount = null;
     },
+    
     snipeToken : function () {
         snipeHelper.snipeToken(
             this.snipeTool.tokenToSwap,

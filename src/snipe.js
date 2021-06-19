@@ -43,6 +43,7 @@ async function snipeToken (_tokenToSwap, _minLiquidityBeforeBuy, _bnbAmountToSpe
   const pairAddress = await factory.getPair(addresses.WBNB, _tokenToSwap);
   const _gasPrice = ethers.utils.parseUnits(_inputGas,'gwei')
   const amountToBuy = _bnbAmountToSpend // in WBNB
+
   // Setting up BNB
   const wbnb = new ethers.Contract(
     _tokenToSwap,
@@ -51,11 +52,13 @@ async function snipeToken (_tokenToSwap, _minLiquidityBeforeBuy, _bnbAmountToSpe
     ],
     signer
   );
+
   // Check liquidity of a pair
   const pair = new ethers.Contract(
     pairAddress, 
     ['event Mint(address indexed sender, uint amount0, uint amount1)']
     , signer);
+    
   pair.on('Mint', async (sender, amount0, amount1) => {
     if(initialLiquidityDetected === true) {
       return;
@@ -71,7 +74,9 @@ async function snipeToken (_tokenToSwap, _minLiquidityBeforeBuy, _bnbAmountToSpe
       amount1:${amount1}
     `);
     const pairBNBvalue = await wbnb.balanceOf(pairAddress);
-    let rdblValue = await ethers.utils.formatEther(pairBNBvalue);
+    let rdblValue = await ethers.utils.parseUnits(`${pairBNBvalue}`, 'ether');
+    //let minLiquidity = await ethers.utils.parseUnits(`${_minLiquidityBeforeBuy}`, 'ether')
+
     const amountIn = ethers.utils.parseUnits(`${amountToBuy}`, 'ether');
     // Buy Token on liquidity add
     console.log(
@@ -85,7 +90,7 @@ async function snipeToken (_tokenToSwap, _minLiquidityBeforeBuy, _bnbAmountToSpe
       PairAddress : ${pairAddress}
       AdressSigner : ${addressSigner}
     `);
-    if(rdblValue > _minLiquidityBeforeBuy){
+    //if(rdblValue > minLiquidity){
       setTimeout(async function(){
         const tx = await router.swapExactTokensForTokensSupportingFeeOnTransferTokens(
           amountIn,
@@ -94,14 +99,14 @@ async function snipeToken (_tokenToSwap, _minLiquidityBeforeBuy, _bnbAmountToSpe
           addressSigner,
           Date.now() + 1000 * 60 * 10, //10 minutes
           {
-            'gasLimit': 2000000,
+            'gasLimit': 200000,
             'gasPrice': _gasPrice,
             'nonce' : null
         });
         const receipt = await tx.wait(); 
         console.log(`Transaction receipt : https://www.bscscan.com/tx/${receipt.transactionHash}`);
       }, 3000);
-  }
+  //}
   });
 }
 module.exports = {
