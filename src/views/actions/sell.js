@@ -86,7 +86,7 @@ async function sellToken (_tokenToSwap, _tokenAmount, _inputGas) {
     Date.now() + 1000 * 60 * 10, //10 minutes
     {
       gasPrice: _gasPrice,
-      gasLimit: 2000000 
+      gasLimit: 400000  // NOTE THAT THIS IS A LIMIT
     }
   );
   const receipt = await tx.wait();

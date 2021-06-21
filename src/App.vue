@@ -1,16 +1,10 @@
 <template>
-  <div id="app">
-    <Tool/>
-  </div>
+  <router-view/>
 </template>
 
 <script>
-import Tool from './components/Tool.vue'
 export default {
-  name: 'App',
-  components: {
-    Tool,
-  }
+  name: 'App'
 }
 </script>
 

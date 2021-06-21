@@ -8,7 +8,7 @@
             <h1 v-if="mode === 0" class="title level-item has-text-centered">Sell Mode</h1>
             <h1 v-else class="title level-item has-text-centered">Sniper bot - Buy</h1>
             <p class="level-item has-text-centered ">
-                <a class="link is-info" @click="switchMode(1)">Sniper bot</a>
+                <!-- <a class="link is-info" @click="switchMode(1)">Sniper bot</a> -->
             </p>
         </nav>
     </div>
@@ -72,8 +72,8 @@
 </template>
 
 <script>
-import sellHelper from '../sell.js'
-import snipeHelper from '../snipe.js'
+import sellHelper from './actions/sell.js'
+import snipeHelper from './actions/snipe.js'
 
 export default {
   name: 'Tool',
