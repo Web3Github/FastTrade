@@ -65,6 +65,26 @@ async function balanceOf (_tokenToSwap) {
   return tx.toString();
 }
 
+// FUNCTION TO GET ALLOWANCE A TOKEN
+async function hasApprove (_tokenToSwap) {
+  const addressSigner = await signer.getAddress();
+  let isSwapApproved = false;
+  // Setting up basics
+  const wbnb = new ethers.Contract(
+    _tokenToSwap,
+    [
+      'function allowance(address owner, address spender) external view returns (uint256)',
+    ],
+    signer
+  );
+  const tx = await wbnb.allowance(
+    addressSigner,
+    router.address
+  );
+  isSwapApproved = tx.toString() > 0 ? true : false;
+  console.log(isSwapApproved);
+  return isSwapApproved;
+}
 // FUNCTION TO SELL TOKEN
 async function sellToken (_tokenToSwap, _tokenAmount, _inputGas) {
   const addressSigner = await signer.getAddress();
@@ -96,5 +116,6 @@ async function sellToken (_tokenToSwap, _tokenAmount, _inputGas) {
 module.exports = {
   sellToken,
   approveSwap,
-  balanceOf
+  balanceOf,
+  hasApprove
 }

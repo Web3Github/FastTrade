@@ -30,7 +30,7 @@
                 <b-input v-model="sellTool.tokenAmount"></b-input>
             </b-field>
             <div class="buttons">
-                <b-button label="Approve Swap" type="is-primary" @click="approveSwap()" expanded/>
+                <b-button v-if="hasApprove === false" label="Approve Swap" type="is-primary" @click="approveSwap()" expanded/>
                 <b-button label="Sell Token" type="is-primary" @click="sellToken()" expanded/>
             </div>
         </section>
@@ -99,6 +99,11 @@ export default {
     async balanceOf() {
         if(this.sellTool.tokenToSwap){
             return sellHelper.balanceOf(this.sellTool.tokenToSwap);
+        }
+    },
+    async hasApprove() {
+        if(this.sellTool.tokenToSwap){
+            return sellHelper.hasApprove(this.sellTool.tokenToSwap);
         }
     }
   },
